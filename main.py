@@ -8,6 +8,7 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from forms import CreatePostForm, RegisterForm, Login, CommentForm
 from flask_gravatar import Gravatar
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -28,7 +29,8 @@ gravatar = Gravatar(app,
                     use_ssl=False,
                     base_url=None)
 
-login_manager = LoginManager(app)  # Crea una instancia de LoginManager y la asigna a su variable. Gestiona la autenticacion de usuarios.
+login_manager = LoginManager(
+    app)  # Crea una instancia de LoginManager y la asigna a su variable. Gestiona la autenticacion de usuarios.
 
 
 @login_manager.user_loader  # Decorador que registra la funcion "load_user" como la funcion que de carga de usuarios. Recibe como argumento el "user_id"
@@ -64,6 +66,7 @@ class BlogPost(db.Model):
     author_id = db.Column("user_id", db.Integer, db.ForeignKey("users.id"))
     comments = relationship("Comment", back_populates="post")  # Agregar esta línea
 
+
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
@@ -74,8 +77,6 @@ class Comment(db.Model):
     user = relationship("User")  # Relación con el modelo de usuario
 
 
-
-"""
 if not os.path.isfile('sqlite:///blog.db'):
     with app.app_context():
         db.create_all()
@@ -89,7 +90,7 @@ with app.app_context():
     )
     db.session.add(admin_user)
     db.session.commit()
-"""
+
 
 @app.route('/')
 def get_all_posts():
