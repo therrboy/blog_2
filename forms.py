@@ -3,7 +3,6 @@ from wtforms import StringField, SubmitField, PasswordField, HiddenField, Valida
 from wtforms.validators import DataRequired, URL, Email
 from flask_ckeditor import CKEditorField
 from datetime import datetime
-from email_validator import validate_email, EmailNotValidError
 
 
 ##WTForm
