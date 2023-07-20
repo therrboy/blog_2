@@ -175,18 +175,25 @@ def logout():
 
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
+
 def show_post(post_id):
     requested_post = db.session.get(BlogPost, post_id)
     form = CommentForm()
-    if form.validate_on_submit():
-        new_comment = Comment(
-            text=form.comment_text.data,
-            post=requested_post,
-            user=current_user  # Asignar el usuario actual al comentario
-        )
 
-        db.session.add(new_comment)
-        db.session.commit()
+    if form.validate_on_submit():
+        if current_user.is_authenticated:
+            new_comment = Comment(
+                text=form.comment_text.data,
+                post=requested_post,
+                user=current_user  # Asignar el usuario actual al comentario
+            )
+
+            db.session.add(new_comment)
+            db.session.commit()
+
+        else:
+            flash("Si deseas dejar un mensaje puedes crear una cuenta!", "warning")
+
         return redirect(url_for("show_post", post_id=post_id))
 
     comments = Comment.query.filter_by(post=requested_post).all()

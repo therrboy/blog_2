@@ -37,6 +37,15 @@
 
 
 <!--           Comments Area -->
+          {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+          {% endwith %}
           <div class="col-lg-8 col-md-10 mx-auto comment">
               <ul class="commentList">
                 <li>
